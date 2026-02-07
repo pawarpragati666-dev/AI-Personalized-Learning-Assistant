@@ -2,39 +2,74 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.set_page_config(page_title="AI Learning Assistant", layout="wide")
+# Page settings
+st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide")
 
+# Sidebar
+st.sidebar.title("🎓 AI Learning Assistant")
+menu = st.sidebar.selectbox(
+    "Navigation",
+    ["Dashboard", "Performance", "Recommendations", "Profile"]
+)
+
+# Main title
 st.title("🎓 AI Personalized Learning Assistant")
 
+# Student input
 name = st.text_input("Enter Student Name")
 
 python_marks = st.slider("Python Marks", 0, 100, 50)
 dbms_marks = st.slider("DBMS Marks", 0, 100, 50)
 ai_marks = st.slider("AI Marks", 0, 100, 50)
 
-if st.button("Analyze Performance"):
+# Data
+data = {
+    "Subject": ["Python", "DBMS", "AI"],
+    "Marks": [python_marks, dbms_marks, ai_marks]
+}
 
-    data = {
-        "Subject": ["Python", "DBMS", "AI"],
-        "Marks": [python_marks, dbms_marks, ai_marks]
-    }
+df = pd.DataFrame(data)
 
-    df = pd.DataFrame(data)
+# Dashboard
+if menu == "Dashboard":
+
+    st.subheader("Student Overview")
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Python", python_marks)
+    col2.metric("DBMS", dbms_marks)
+    col3.metric("AI", ai_marks)
+
+# Performance page
+elif menu == "Performance":
 
     st.subheader("Performance Chart")
+
     fig = px.bar(df, x="Subject", y="Marks", color="Marks")
     st.plotly_chart(fig, use_container_width=True)
 
-    st.subheader("AI Recommendations")
+# Recommendation page
+elif menu == "Recommendations":
+
+    st.subheader("AI Learning Recommendations")
 
     if python_marks < 50:
-        st.warning("Improve Python skills")
+        st.warning("Improve Python skills: Practice loops, functions")
 
     if dbms_marks < 50:
-        st.warning("Improve DBMS skills")
+        st.warning("Improve DBMS skills: Study normalization")
 
     if ai_marks < 50:
-        st.warning("Improve AI skills")
+        st.warning("Improve AI skills: Learn ML basics")
 
     if python_marks >= 50 and dbms_marks >= 50 and ai_marks >= 50:
-        st.success("Excellent performance!")
+        st.success("Excellent performance! Keep it up.")
+
+# Profile page
+elif menu == "Profile":
+
+    st.subheader("Student Profile")
+
+    st.write("Name:", name)
+    st.write("Course: MCA")
