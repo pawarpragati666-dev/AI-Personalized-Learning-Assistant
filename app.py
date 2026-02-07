@@ -6,34 +6,67 @@ from quiz_data import quiz_questions
 
 from data_manager import load_data, save_data
 
+st.set_page_config(
+    page_title="AI Personalized Learning Assistant",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # Custom CSS styling
+# Modern Professional UI Styling
 st.markdown("""
 <style>
+
+/* Main background */
 .main {
-    background-color: #f5f7fb;
+    background-color: #f8fafc;
 }
 
-.stButton>button {
-    background-color: #4CAF50;
-    color: white;
+/* Sidebar styling */
+section[data-testid="stSidebar"] {
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+}
+
+/* Sidebar text */
+section[data-testid="stSidebar"] * {
+    color: #1f2937;
+}
+
+/* Title styling */
+h1 {
+    color: #1e3a8a;
     font-weight: bold;
-    border-radius: 8px;
 }
 
+/* Buttons */
+.stButton>button {
+    background-color: #10b981;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    padding: 8px 16px;
+}
+
+.stButton>button:hover {
+    background-color: #059669;
+}
+
+/* Input fields */
 .stTextInput>div>div>input {
     border-radius: 8px;
+    border: 1px solid #d1d5db;
 }
 
-.stSidebar {
-    background-color: #1e3a8a;
-    color: white;
+/* Sliders */
+.stSlider {
+    color: #3b82f6;
 }
 
-h1, h2, h3 {
-    color: #1e3a8a;
-}
 </style>
 """, unsafe_allow_html=True)
+
 
 # Page settings
 st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide")
