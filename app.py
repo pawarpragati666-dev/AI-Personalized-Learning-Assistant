@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from ai_engine import analyze_performance
+from ai_engine import analyze_performance, predict_performance
+
 from data_manager import load_data, save_data
 
 # Page settings
@@ -11,8 +12,9 @@ st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide
 st.sidebar.title("🎓 AI Learning Assistant")
 menu = st.sidebar.selectbox(
     "Navigation",
-    ["Dashboard", "Performance", "Recommendations", "Student Data", "Profile"]
+    ["Dashboard", "Performance", "Recommendations", "Roadmap", "Student Data", "Profile"]
 )
+
 
 # Main title
 st.title("🎓 AI Personalized Learning Assistant")
@@ -71,13 +73,31 @@ elif menu == "Recommendations":
     for subject, info in results.items():
 
         if info["level"] == "Weak":
-            st.error(f"{subject}: Weak - {info['recommendation']}")
+            st.error(f"{subject}: Weak - {info['roadmap']}")
 
         elif info["level"] == "Average":
-            st.warning(f"{subject}: Average - {info['recommendation']}")
+            st.warning(f"{subject}: Average - {info['roadmap']}")
 
         else:
-            st.success(f"{subject}: Strong - {info['recommendation']}")
+            st.success(f"{subject}: Strong - {info['roadmap']}")
+
+elif menu == "Roadmap":
+
+    st.subheader("AI Learning Roadmap")
+
+    results = analyze_performance(python_marks, dbms_marks, ai_marks)
+
+    for subject, info in results.items():
+
+        st.write(f"### {subject}")
+        st.write(f"Level: {info['level']}")
+        st.write(f"Roadmap: {info['roadmap']}")
+
+    st.subheader("Performance Prediction")
+
+    prediction = predict_performance(python_marks, dbms_marks, ai_marks)
+
+    st.info(prediction)
 
 # Student Data page
 elif menu == "Student Data":
