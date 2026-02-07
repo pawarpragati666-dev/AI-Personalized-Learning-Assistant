@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from ai_engine import analyze_performance
+from data_manager import load_data, save_data
 
 
 # Page settings
@@ -11,8 +12,16 @@ st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide
 st.sidebar.title("🎓 AI Learning Assistant")
 menu = st.sidebar.selectbox(
     "Navigation",
-    ["Dashboard", "Performance", "Recommendations", "Profile"]
+    ["Dashboard", "Performance", "Recommendations", "Student Data", "Profile"]
 )
+
+
+if st.button("Save Student Data"):
+
+    save_data(name, python_marks, dbms_marks, ai_marks)
+
+    st.success("Student data saved successfully!")
+
 
 # Main title
 st.title("🎓 AI Personalized Learning Assistant")
@@ -78,3 +87,11 @@ elif menu == "Profile":
 
     st.write("Name:", name)
     st.write("Course: MCA")
+
+elif menu == "Student Data":
+
+    st.subheader("Student Records")
+
+    df = load_data()
+
+    st.dataframe(df)
