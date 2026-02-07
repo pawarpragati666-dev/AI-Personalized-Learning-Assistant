@@ -2,8 +2,38 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from ai_engine import analyze_performance, predict_performance
+from quiz_data import quiz_questions
 
 from data_manager import load_data, save_data
+
+# Custom CSS styling
+st.markdown("""
+<style>
+.main {
+    background-color: #f5f7fb;
+}
+
+.stButton>button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.stTextInput>div>div>input {
+    border-radius: 8px;
+}
+
+.stSidebar {
+    background-color: #1e3a8a;
+    color: white;
+}
+
+h1, h2, h3 {
+    color: #1e3a8a;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Page settings
 st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide")
@@ -12,8 +42,10 @@ st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide
 st.sidebar.title("🎓 AI Learning Assistant")
 menu = st.sidebar.selectbox(
     "Navigation",
-    ["Dashboard", "Performance", "Recommendations", "Roadmap", "Student Data", "Profile"]
+    ["Dashboard", "Performance", "Recommendations", "Roadmap", "Quiz", "Student Data", "Profile"]
 )
+
+
 
 
 # Main title
@@ -115,3 +147,28 @@ elif menu == "Profile":
 
     st.write("Name:", name)
     st.write("Course: MCA")
+
+elif menu == "Quiz":
+
+    st.subheader("AI Knowledge Quiz")
+
+    score = 0
+
+    for i, q in enumerate(quiz_questions):
+
+        st.write(f"Q{i+1}: {q['question']}")
+
+        answer = st.radio(
+            "Select answer:",
+            q["options"],
+            key=i
+        )
+
+        if answer == q["answer"]:
+            score += 1
+
+    if st.button("Submit Quiz"):
+        st.success(f"Your Score: {score}/{len(quiz_questions)}")
+
+        if score == len(quiz_questions):
+            st.balloons()
