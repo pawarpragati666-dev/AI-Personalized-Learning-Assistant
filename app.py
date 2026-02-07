@@ -4,7 +4,6 @@ import plotly.express as px
 from ai_engine import analyze_performance
 from data_manager import load_data, save_data
 
-
 # Page settings
 st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide")
 
@@ -14,14 +13,6 @@ menu = st.sidebar.selectbox(
     "Navigation",
     ["Dashboard", "Performance", "Recommendations", "Student Data", "Profile"]
 )
-
-
-if st.button("Save Student Data"):
-
-    save_data(name, python_marks, dbms_marks, ai_marks)
-
-    st.success("Student data saved successfully!")
-
 
 # Main title
 st.title("🎓 AI Personalized Learning Assistant")
@@ -33,7 +24,17 @@ python_marks = st.slider("Python Marks", 0, 100, 50)
 dbms_marks = st.slider("DBMS Marks", 0, 100, 50)
 ai_marks = st.slider("AI Marks", 0, 100, 50)
 
-# Data
+# ✅ Save button MUST come AFTER inputs
+if st.button("Save Student Data"):
+
+    if name.strip() == "":
+        st.error("Please enter student name")
+
+    else:
+        save_data(name, python_marks, dbms_marks, ai_marks)
+        st.success("Student data saved successfully!")
+
+# Data for charts
 data = {
     "Subject": ["Python", "DBMS", "AI"],
     "Marks": [python_marks, dbms_marks, ai_marks]
@@ -78,7 +79,14 @@ elif menu == "Recommendations":
         else:
             st.success(f"{subject}: Strong - {info['recommendation']}")
 
+# Student Data page
+elif menu == "Student Data":
 
+    st.subheader("Student Records")
+
+    df_students = load_data()
+
+    st.dataframe(df_students)
 
 # Profile page
 elif menu == "Profile":
@@ -87,11 +95,3 @@ elif menu == "Profile":
 
     st.write("Name:", name)
     st.write("Course: MCA")
-
-elif menu == "Student Data":
-
-    st.subheader("Student Records")
-
-    df = load_data()
-
-    st.dataframe(df)
