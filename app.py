@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from ai_engine import analyze_performance
+
 
 # Page settings
 st.set_page_config(page_title="AI Personalized Learning Assistant", layout="wide")
@@ -54,17 +56,20 @@ elif menu == "Recommendations":
 
     st.subheader("AI Learning Recommendations")
 
-    if python_marks < 50:
-        st.warning("Improve Python skills: Practice loops, functions")
+    results = analyze_performance(python_marks, dbms_marks, ai_marks)
 
-    if dbms_marks < 50:
-        st.warning("Improve DBMS skills: Study normalization")
+    for subject, info in results.items():
 
-    if ai_marks < 50:
-        st.warning("Improve AI skills: Learn ML basics")
+        if info["level"] == "Weak":
+            st.error(f"{subject}: Weak - {info['recommendation']}")
 
-    if python_marks >= 50 and dbms_marks >= 50 and ai_marks >= 50:
-        st.success("Excellent performance! Keep it up.")
+        elif info["level"] == "Average":
+            st.warning(f"{subject}: Average - {info['recommendation']}")
+
+        else:
+            st.success(f"{subject}: Strong - {info['recommendation']}")
+
+
 
 # Profile page
 elif menu == "Profile":
